@@ -928,11 +928,11 @@ tmp<volScalarField> cfdemCloud::ddtVoidfraction() const
 {
     if (useDDTvoidfraction_==word("off"))
     {
-        return tmp<volScalarField> (ddtVoidfraction_ * 0.);           
+        return tmp<volScalarField> (ddtVoidfraction_ * 0.);
         if(verbose_)
             Info << "suppressing ddt(voidfraction)" << endl;
     }
-    return tmp<volScalarField> (ddtVoidfraction_ * 1.) ;     
+    return tmp<volScalarField> (ddtVoidfraction_ * 1.) ;
 }
 
 void cfdemCloud::calcDdtVoidfraction(volScalarField& voidfraction, volVectorField& Us) const
@@ -943,7 +943,7 @@ void cfdemCloud::calcDdtVoidfraction(volScalarField& voidfraction, volVectorFiel
         ddtVoidfraction_=fvc::div(Us*(1.-voidfraction));
     }else // "b" or "off"
     {
-        ddtVoidfraction_ = fvc::ddt(voidfraction);     
+        ddtVoidfraction_ = fvc::ddt(voidfraction);
     }
 }
 
