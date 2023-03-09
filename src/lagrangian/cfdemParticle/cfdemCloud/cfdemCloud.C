@@ -706,7 +706,11 @@ bool Foam::cfdemCloud::evolve
 
     if(!ignore())
     {
-        if(!writeTimePassed_ && mesh_.time().outputTime()) writeTimePassed_=true;
+        //if(!writeTimePassed_ && mesh_.time().outputTime()) writeTimePassed_=true;
+		if(!writeTimePassed_ && mesh_.time().outputTime())
+		{writeTimePassed_=true;}
+		else
+		{ writeTimePassed_=false;}
         if (dataExchangeM().doCoupleNow())
         {
             Info << "\n Coupling..." << endl;
@@ -911,15 +915,24 @@ tmp<fvVectorMatrix> cfdemCloud::divVoidfractionTau(volVectorField& U,volScalarFi
     );
 }
 
+tmp<fvVectorMatrix> cfdemCloud::divVoidfractionTauVOF(volVectorField& U,volScalarField& voidfractionrho) const
+{
+    return
+    (
+      - fvm::laplacian(voidfractionNuEffVOF(voidfractionrho), U)
+      - fvc::div(voidfractionNuEffVOF(voidfractionrho)*dev2(fvc::grad(U)().T()))
+    );
+}
+
 tmp<volScalarField> cfdemCloud::ddtVoidfraction() const
 {
     if (useDDTvoidfraction_==word("off"))
     {
-        return tmp<volScalarField> (ddtVoidfraction_ * 0.);
+        return tmp<volScalarField> (ddtVoidfraction_ * 0.);           
         if(verbose_)
             Info << "suppressing ddt(voidfraction)" << endl;
     }
-    return tmp<volScalarField> (ddtVoidfraction_ * 1.) ;
+    return tmp<volScalarField> (ddtVoidfraction_ * 1.) ;     
 }
 
 void cfdemCloud::calcDdtVoidfraction(volScalarField& voidfraction, volVectorField& Us) const
@@ -930,7 +943,7 @@ void cfdemCloud::calcDdtVoidfraction(volScalarField& voidfraction, volVectorFiel
         ddtVoidfraction_=fvc::div(Us*(1.-voidfraction));
     }else // "b" or "off"
     {
-        ddtVoidfraction_ = fvc::ddt(voidfraction);
+        ddtVoidfraction_ = fvc::ddt(voidfraction);     
     }
 }
 
@@ -1016,6 +1029,17 @@ tmp<volScalarField> cfdemCloud::voidfractionNuEff(volScalarField& voidfraction) 
     }
 }
 
+tmp<volScalarField> cfdemCloud::voidfractionNuEffVOF(volScalarField& voidfractionrho) const
+{
+        return tmp<volScalarField>
+        (
+                new volScalarField("viscousTerm", voidfractionrho*(   turbulence_.nut() 
+                                                                    + turbulence_.nu()
+                                                                    + turbulenceMultiphase_
+                                                                )
+                                  )
+        );
+}
 void cfdemCloud::resetArray(double**& array,int length,int width,double resetVal)
 {
     for(int index = 0;index < length; ++index){
