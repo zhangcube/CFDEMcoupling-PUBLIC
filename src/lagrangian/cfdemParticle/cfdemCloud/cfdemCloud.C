@@ -915,15 +915,6 @@ tmp<fvVectorMatrix> cfdemCloud::divVoidfractionTau(volVectorField& U,volScalarFi
     );
 }
 
-tmp<fvVectorMatrix> cfdemCloud::divVoidfractionTauVOF(volVectorField& U,volScalarField& voidfractionrho) const
-{
-    return
-    (
-      - fvm::laplacian(voidfractionNuEffVOF(voidfractionrho), U)
-      - fvc::div(voidfractionNuEffVOF(voidfractionrho)*dev2(fvc::grad(U)().T()))
-    );
-}
-
 tmp<volScalarField> cfdemCloud::ddtVoidfraction() const
 {
     if (useDDTvoidfraction_==word("off"))
@@ -1029,17 +1020,6 @@ tmp<volScalarField> cfdemCloud::voidfractionNuEff(volScalarField& voidfraction) 
     }
 }
 
-tmp<volScalarField> cfdemCloud::voidfractionNuEffVOF(volScalarField& voidfractionrho) const
-{
-        return tmp<volScalarField>
-        (
-                new volScalarField("viscousTerm", voidfractionrho*(   turbulence_.nut() 
-                                                                    + turbulence_.nu()
-                                                                    + turbulenceMultiphase_
-                                                                )
-                                  )
-        );
-}
 void cfdemCloud::resetArray(double**& array,int length,int width,double resetVal)
 {
     for(int index = 0;index < length; ++index){
