@@ -180,6 +180,7 @@ void viscForce::setForce() const
 
             // write particle based data to global array
             forceSubM(0).partToArray(index,force,vector::zero);
+            forceSubM(0).passViscForce(index,force);
         //}
     }
 }

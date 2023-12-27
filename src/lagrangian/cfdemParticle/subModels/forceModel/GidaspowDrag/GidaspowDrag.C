@@ -287,6 +287,7 @@ void GidaspowDrag::setForce() const
 
             // write particle based data to global array
             forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient);
+            forceSubM(0).passDragOnlyForce(index,drag);
 
         //}// end if mask
     }// end loop particles

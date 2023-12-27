@@ -190,6 +190,7 @@ void interface::setForce() const
 
                // write particle based data to global array
                forceSubM(0).partToArray(index,interfaceForce,vector::zero);
+               forceSubM(0).passInterfaceForce(index,interfaceForce);
 
             } // end if particle found on proc domain
         //}// end if in mask
