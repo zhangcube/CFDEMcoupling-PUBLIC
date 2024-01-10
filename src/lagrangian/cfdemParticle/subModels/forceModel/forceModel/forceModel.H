@@ -220,6 +220,8 @@ public:
 
         inline double ** liftForce() const { return particleCloud_.liftForce_;};
 
+        inline double ** virtualMassForce() const { return particleCloud_.virtualMassForce_;};
+
         inline double ** interfaceForce() const { return particleCloud_.interfaceForce_;};
         
         inline double ** DEMTorques() const { return particleCloud_.DEMTorques();};

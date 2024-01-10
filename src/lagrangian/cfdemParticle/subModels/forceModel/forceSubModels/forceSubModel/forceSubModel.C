@@ -260,6 +260,16 @@ void forceSubModel::passLiftForce
         myForceM().liftForce()[index][j] += force[j];
 }
 
+void forceSubModel::passvirtualMassForce
+(
+    const label& index,
+    const vector& force
+) const
+{
+    for(int j=0;j<3;j++)
+        myForceM().virtualMassForce()[index][j] += force[j];
+}
+
 void forceSubModel::passInterfaceForce
 (
     const label& index,

@@ -132,6 +132,8 @@ protected:
 
     mutable double **liftForce_;
 
+    mutable double **virtualMassForce_;
+
     mutable double **interfaceForce_;
 
     mutable double **Cds_;
@@ -381,6 +383,8 @@ public:
        inline double ** dragOnlyForce() const;
 
        inline double ** liftForce() const;
+       
+       inline double ** virtualMassForce() const;
 
        inline double ** interfaceForce() const;
 

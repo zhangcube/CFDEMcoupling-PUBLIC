@@ -97,6 +97,7 @@ Foam::cfdemCloud::cfdemCloud
     viscForce_(NULL),
     dragOnlyForce_(NULL),
     liftForce_(NULL),
+    virtualMassForce_(NULL),
     interfaceForce_(NULL),
     Cds_(NULL),
     radii_(NULL),
@@ -466,6 +467,7 @@ Foam::cfdemCloud::~cfdemCloud()
     dataExchangeM().destroy(viscForce_,3);
     dataExchangeM().destroy(dragOnlyForce_,3);
     dataExchangeM().destroy(liftForce_,3);
+    dataExchangeM().destroy(virtualMassForce_,3);
     dataExchangeM().destroy(interfaceForce_,3);
     dataExchangeM().destroy(Cds_,1);
     dataExchangeM().destroy(radii_,1);
@@ -512,6 +514,7 @@ void Foam::cfdemCloud::giveDEMdata()
         dataExchangeM().giveData("viscForce","vector-atom",viscForce_);
         dataExchangeM().giveData("dragOnlyForce","vector-atom",dragOnlyForce_);
         dataExchangeM().giveData("liftForce","vector-atom",liftForce_);
+        dataExchangeM().giveData("virtualMassForce","vector-atom",virtualMassForce_);
         dataExchangeM().giveData("interfaceForce","vector-atom",interfaceForce_);
     }
 
@@ -584,6 +587,7 @@ void Foam::cfdemCloud::setForces()
     resetArray(viscForce_,numberOfParticles(),3);
     resetArray(dragOnlyForce_,numberOfParticles(),3);
     resetArray(liftForce_,numberOfParticles(),3);
+    resetArray(virtualMassForce_,numberOfParticles(),3);
     resetArray(interfaceForce_,numberOfParticles(),3);
     resetArray(Cds_,numberOfParticles(),1);
 
@@ -901,6 +905,7 @@ bool Foam::cfdemCloud::reAllocArrays() const
         dataExchangeM().allocateArray(viscForce_,0.,3);
         dataExchangeM().allocateArray(dragOnlyForce_,0.,3);
         dataExchangeM().allocateArray(liftForce_,0.,3);
+        dataExchangeM().allocateArray(virtualMassForce_,0.,3);
         dataExchangeM().allocateArray(interfaceForce_,0.,3);
         dataExchangeM().allocateArray(Cds_,0.,1);
         dataExchangeM().allocateArray(radii_,0.,1);
@@ -938,6 +943,7 @@ bool Foam::cfdemCloud::reAllocArrays(int nP, bool forceRealloc) const
         dataExchangeM().allocateArray(viscForce_,0.,3,nP);
         dataExchangeM().allocateArray(dragOnlyForce_,0.,3,nP);
         dataExchangeM().allocateArray(liftForce_,0.,3,nP);
+        dataExchangeM().allocateArray(virtualMassForce_,0.,3,nP);
         dataExchangeM().allocateArray(interfaceForce_,0.,3,nP);
         dataExchangeM().allocateArray(Cds_,0.,1,nP);
         dataExchangeM().allocateArray(radii_,0.,1,nP);

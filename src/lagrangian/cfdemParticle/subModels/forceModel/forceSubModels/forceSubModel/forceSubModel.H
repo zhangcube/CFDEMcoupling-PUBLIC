@@ -155,6 +155,8 @@ public:
 
         void passLiftForce(const label&, const vector&) const;
 
+        void passvirtualMassForce(const label&, const vector&) const;
+
         void passInterfaceForce(const label&, const vector&) const;
 
         //function to set anisotropic drag components for DEM side only.

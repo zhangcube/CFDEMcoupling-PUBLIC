@@ -248,6 +248,7 @@ void virtualMassForce::setForce() const
     
             // write particle based data to global array
             forceSubM(0).partToArray(index,virtualMassForce,vector::zero);
+            forceSubM(0).passvirtualMassForce(index,virtualMassForce);
     }
 }
 
