@@ -66,7 +66,7 @@ BenyasemiDrag::BenyasemiDrag
     U_(sm.mesh().lookupObject<volVectorField> (velFieldName_)),
     voidfractionFieldName_(propsDict_.lookup("voidfractionFieldName")),
     voidfraction_(sm.mesh().lookupObject<volScalarField> (voidfractionFieldName_)),
-    UsFieldName_(propsDict_.lookup("granVelFieldName")),
+    UsFieldName_(propsDict_.lookupOrDefault("granVelFieldName",word("Us"))),
     UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_))
 {
     // suppress particle probe
@@ -190,11 +190,11 @@ void BenyasemiDrag::setForce() const
 
                 Us = particleCloud_.velocity(index);
 ////////////////////////////////////////////////////////////////////////////////////////////////
- forAll(particleCloud_.mesh().C(),i)
-          {     //A    Pout <<T_.size()<< endl; 
+            forAll(particleCloud_.mesh().C(),i)
+            {     //A    Pout <<T_.size()<< endl; 
              distance=mag(particleCloud_.mesh().C()[i]-particleCloud_.position(index));
-      // Info <<distance<<T_.size()<< endl;
-              if (ds>0.0004)
+            // Info <<distance<<T_.size()<< endl;
+              /*if (ds>0.0004)
               {
                   if (distance<2*ds )
                              //       if (1 )
@@ -208,7 +208,7 @@ void BenyasemiDrag::setForce() const
                              sumVol=sumVol+particleCloud_.mesh().V()[i];                 
                          }   
               }
-              else 
+              else */
               {
                   if (distance<3*ds )
                              //       if (1 )
@@ -224,7 +224,6 @@ void BenyasemiDrag::setForce() const
               }
       
           }
-       
        
                 Ufluidd=(Ufluidd)/(sumUCoefficient);
                 voidfractionn=(voidfractionn)/(sumVol);
@@ -342,8 +341,9 @@ void BenyasemiDrag::setForce() const
                     }
                 }
 
-                if(forceSubM(0).verbose() && index >-1 && index <2)
+                if(forceSubM(0).verbose() && index >=0 && index <2)
                 {
+                    Pout << "cellI = " << cellI << endl;
                     Pout << "index = " << index << endl;
                     Pout << "Us = " << Us << endl;
                     Pout << "Ur = " << Ur << endl;
