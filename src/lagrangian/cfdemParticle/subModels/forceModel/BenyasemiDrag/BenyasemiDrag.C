@@ -191,44 +191,37 @@ void BenyasemiDrag::setForce() const
                 Us = particleCloud_.velocity(index);
 ////////////////////////////////////////////////////////////////////////////////////////////////
             forAll(particleCloud_.mesh().C(),i)
-            {     //A    Pout <<T_.size()<< endl; 
-             distance=mag(particleCloud_.mesh().C()[i]-particleCloud_.position(index));
+            {
+            distance=mag(particleCloud_.mesh().C()[i]-particleCloud_.position(index));
+            //Info <<" index = "<<index <<" cellI = "<<cellI <<" i = " << i<< endl;
             // Info <<distance<<T_.size()<< endl;
               /*if (ds>0.0004)
               {
                   if (distance<2*ds )
-                             //       if (1 )
-                         {    // Info <<index <<"  "<<cellI<<"  " <<T_.size()<< endl;//B 
-                             coefficient=exp(-distance*distance/(8*ds*ds));
-               
-                             sumUCoefficient=sumUCoefficient+coefficient*voidfraction_[i];
-                             Ufluidd=Ufluidd+coefficient*U_[i]*voidfraction_[i];
-                            //Ufluidd=Ufluidd+coefficient*U_[celli];//*voidfraction_[celli];
-                             voidfractionn=voidfractionn+voidfraction_[i]*particleCloud_.mesh().V()[i];
-                             sumVol=sumVol+particleCloud_.mesh().V()[i];                 
+                         {
+                            coefficient=exp(-distance*distance/(8*ds*ds));
+                            sumUCoefficient=sumUCoefficient+coefficient*voidfraction_[i];
+                            Ufluidd=Ufluidd+coefficient*U_[i]*voidfraction_[i];
+                            voidfractionn=voidfractionn+voidfraction_[i]*particleCloud_.mesh().V()[i];
+                            sumVol=sumVol+particleCloud_.mesh().V()[i];                 
                          }   
               }
               else */
               {
                   if (distance<3*ds )
-                             //       if (1 )
-                         {    // Info <<index <<"  "<<cellI<<"  " <<T_.size()<< endl;//B 
-                             coefficient=exp(-distance*distance/(18*ds*ds));
-               
-                             sumUCoefficient=sumUCoefficient+coefficient*voidfraction_[i];
-                             Ufluidd=Ufluidd+coefficient*U_[i]*voidfraction_[i];
-                            //Ufluidd=Ufluidd+coefficient*U_[celli];//*voidfraction_[celli];
-                             voidfractionn=voidfractionn+voidfraction_[i]*particleCloud_.mesh().V()[i];
-                             sumVol=sumVol+particleCloud_.mesh().V()[i];                
-                         }        
+                         {  //Info <<" index = "<<index <<" cellI = "<<cellI <<" i = " << i<< endl;
+                            //Info<< "index = "<< index <<"i = " << i << nl << endl;
+                            coefficient=exp(-distance*distance/(18*ds*ds));
+                            sumUCoefficient=sumUCoefficient+coefficient*voidfraction_[i];
+                            Ufluidd=Ufluidd+coefficient*U_[i]*voidfraction_[i];
+                            voidfractionn=voidfractionn+voidfraction_[i]*particleCloud_.mesh().V()[i];
+                            sumVol=sumVol+particleCloud_.mesh().V()[i];                
+                         }
               }
-      
           }
-       
                 Ufluidd=(Ufluidd)/(sumUCoefficient);
                 voidfractionn=(voidfractionn)/(sumVol);
 ///////////////////////////////////////////////////////
-
                 //Update any scalar or vector quantity
                 for (int iFSub=0;iFSub<nrForceSubModels();iFSub++)
                       forceSubM(iFSub).update(  index, 
