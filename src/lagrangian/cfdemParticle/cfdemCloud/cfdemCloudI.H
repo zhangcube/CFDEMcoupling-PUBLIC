@@ -181,7 +181,26 @@ inline double ** cfdemCloud::voidfractions() const
 {
     return voidfractions_;
 }
+inline bool cfdemCloud::getParticleAngVels() const
+{
+    return getParticleAngVels_;
+}
+      
+inline double ** cfdemCloud::particleAngVels() const
+{
+    return particleAngVels_;
+}
 
+inline vector cfdemCloud::particleAngVel(label index) const
+{
+    if(!getParticleAngVels_) return vector::zero;
+    else
+    {
+        vector angVel;
+        for(int i=0;i<3;i++) angVel[i] = particleAngVels_[index][i];
+        return angVel;
+    }
+}
 inline void cfdemCloud::get_radii(double **& values) const
 {
 //    Info << "set_radii level=" << numberOfParticles_ << endl;

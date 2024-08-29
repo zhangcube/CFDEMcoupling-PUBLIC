@@ -124,6 +124,8 @@ Foam::cfdemCloud::cfdemCloud
     treatVoidCellsAsExplicitForce_(false),
     useDDTvoidfraction_("off"),
     passIndividualForce_("off"),
+    getParticleAngVels_(couplingProperties_.lookupOrDefault<bool>("getParticleAngVels",false)),
+    particleAngVels_(NULL),
     ddtVoidfraction_
     (   
         IOobject
@@ -476,7 +478,7 @@ Foam::cfdemCloud::~cfdemCloud()
     dataExchangeM().destroy(particleWeights_,1);
     dataExchangeM().destroy(particleVolumes_,1);
     dataExchangeM().destroy(particleV_,1);
-
+    if(getParticleAngVels_) dataExchangeM().destroy(particleAngVels_,1);
     //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
     int iUser=0;
     for( std::vector<double**>::iterator 
@@ -914,6 +916,7 @@ bool Foam::cfdemCloud::reAllocArrays() const
         dataExchangeM().allocateArray(particleWeights_,0.,voidFractionM().maxCellsPerParticle());
         dataExchangeM().allocateArray(particleVolumes_,0.,voidFractionM().maxCellsPerParticle());
         dataExchangeM().allocateArray(particleV_,0.,1);
+        if(getParticleAngVels_) dataExchangeM().allocateArray(particleAngVels_,0.,3);
         
         //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
         if(namesFieldsUserCFDEMToExt.size()!=particleDatFieldsUserCFDEMToExt.size())

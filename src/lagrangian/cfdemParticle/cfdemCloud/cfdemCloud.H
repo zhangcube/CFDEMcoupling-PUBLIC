@@ -189,6 +189,9 @@ protected:
     mutable word useDDTvoidfraction_;
     
     mutable word passIndividualForce_;
+    const bool getParticleAngVels_;
+    mutable double **particleAngVels_; // particle angular velocities
+    
 
     mutable volScalarField ddtVoidfraction_;
 
@@ -406,6 +409,8 @@ public:
 
        virtual inline double particleVolume(int);
 
+
+
        inline scalar radius(int);
 
        virtual inline double d(int);
@@ -424,7 +429,9 @@ public:
             FatalError << "cfdemCloud::particleType(index): you are attempting to get the particle type, but this array is not transferred to CFDEM for this cloud. Use a different cloud, or avoid asking for the particle type." << abort(FatalError);
             return -1;
        };
-
+       inline bool getParticleAngVels() const;
+       virtual inline double ** particleAngVels() const;
+       virtual vector particleAngVel(label index) const;
        //access to the particle's rotation and torque data
        virtual inline double ** DEMTorques() const {return NULL;};
        virtual inline double ** omegaArray() const {return NULL;};
