@@ -230,6 +230,16 @@ void forceSubModel::passGradPForce
         myForceM().gradPForce()[index][j] += force[j];
 }
 
+void forceSubModel::passArchimedesForce
+(
+    const label& index,
+    const vector& force
+) const
+{
+    for(int j=0;j<3;j++)
+        myForceM().Archimedes()[index][j] += force[j];
+}
+
 void forceSubModel::passViscForce
 (
     const label& index,

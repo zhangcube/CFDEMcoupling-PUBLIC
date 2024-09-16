@@ -149,6 +149,8 @@ public:
 
         void passGradPForce(const label&, const vector&) const;
 
+        void passArchimedesForce(const label&, const vector&) const;
+
         void passViscForce(const label&, const vector&) const;
 
         void passDragOnlyForce(const label&, const vector&) const;

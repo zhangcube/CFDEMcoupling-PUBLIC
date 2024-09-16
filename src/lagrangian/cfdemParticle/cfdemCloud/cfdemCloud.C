@@ -99,6 +99,7 @@ Foam::cfdemCloud::cfdemCloud
     liftForce_(NULL),
     virtualMassForce_(NULL),
     interfaceForce_(NULL),
+    Archimedes_(NULL),
     Cds_(NULL),
     radii_(NULL),
     voidfractions_(NULL),
@@ -471,6 +472,7 @@ Foam::cfdemCloud::~cfdemCloud()
     dataExchangeM().destroy(liftForce_,3);
     dataExchangeM().destroy(virtualMassForce_,3);
     dataExchangeM().destroy(interfaceForce_,3);
+    dataExchangeM().destroy(Archimedes_,3);
     dataExchangeM().destroy(Cds_,1);
     dataExchangeM().destroy(radii_,1);
     dataExchangeM().destroy(voidfractions_,1);
@@ -518,6 +520,7 @@ void Foam::cfdemCloud::giveDEMdata()
         dataExchangeM().giveData("liftForce","vector-atom",liftForce_);
         dataExchangeM().giveData("virtualMassForce","vector-atom",virtualMassForce_);
         dataExchangeM().giveData("interfaceForce","vector-atom",interfaceForce_);
+        dataExchangeM().giveData("Archimedes","vector-atom",Archimedes_);
     }
 
     if(impDEMdrag_)
@@ -591,6 +594,7 @@ void Foam::cfdemCloud::setForces()
     resetArray(liftForce_,numberOfParticles(),3);
     resetArray(virtualMassForce_,numberOfParticles(),3);
     resetArray(interfaceForce_,numberOfParticles(),3);
+    resetArray(Archimedes_,numberOfParticles(),3);
     resetArray(Cds_,numberOfParticles(),1);
 
     //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
@@ -909,6 +913,7 @@ bool Foam::cfdemCloud::reAllocArrays() const
         dataExchangeM().allocateArray(liftForce_,0.,3);
         dataExchangeM().allocateArray(virtualMassForce_,0.,3);
         dataExchangeM().allocateArray(interfaceForce_,0.,3);
+        dataExchangeM().allocateArray(Archimedes_,0.,3);
         dataExchangeM().allocateArray(Cds_,0.,1);
         dataExchangeM().allocateArray(radii_,0.,1);
         dataExchangeM().allocateArray(voidfractions_,1.,voidFractionM().maxCellsPerParticle());
@@ -948,6 +953,7 @@ bool Foam::cfdemCloud::reAllocArrays(int nP, bool forceRealloc) const
         dataExchangeM().allocateArray(liftForce_,0.,3,nP);
         dataExchangeM().allocateArray(virtualMassForce_,0.,3,nP);
         dataExchangeM().allocateArray(interfaceForce_,0.,3,nP);
+        dataExchangeM().allocateArray(Archimedes_,0.,3,nP);
         dataExchangeM().allocateArray(Cds_,0.,1,nP);
         dataExchangeM().allocateArray(radii_,0.,1,nP);
         dataExchangeM().allocateArray(voidfractions_,1.,voidFractionM().maxCellsPerParticle(),nP);

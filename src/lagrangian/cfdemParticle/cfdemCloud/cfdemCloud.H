@@ -135,6 +135,8 @@ protected:
     mutable double **virtualMassForce_;
 
     mutable double **interfaceForce_;
+    
+    mutable double **Archimedes_;
 
     mutable double **Cds_;
 
