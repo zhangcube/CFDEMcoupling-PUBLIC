@@ -393,6 +393,8 @@ public:
 
        inline double ** interfaceForce() const;
 
+       inline double ** Archimedes() const;
+
        inline double ** Cds() const;
 
        inline double ** radii() const;
