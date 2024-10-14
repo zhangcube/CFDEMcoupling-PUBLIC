@@ -62,6 +62,7 @@ $(forceModels)/AbrahamDrag/AbrahamDrag.C
 $(forceModels)/KochHillDrag/KochHillDrag.C
 $(forceModels)/LaEuScalarTemp/LaEuScalarTemp.C
 $(forceModels)/MeiLift/MeiLift.C
+$(forceModels)/ZhangLift/ZhangLift.C
 $(forceModels)/noDrag/noDrag.C
 $(forceModels)/particleCellVolume/particleCellVolume.C
 $(forceModels)/particleVolume/particleVolume.C
