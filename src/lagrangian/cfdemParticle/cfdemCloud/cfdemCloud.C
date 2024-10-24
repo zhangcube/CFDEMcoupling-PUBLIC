@@ -125,7 +125,7 @@ Foam::cfdemCloud::cfdemCloud
     treatVoidCellsAsExplicitForce_(false),
     useDDTvoidfraction_("off"),
     passIndividualForce_("off"),
-    getParticleAngVels_(couplingProperties_.lookupOrDefault<bool>("getParticleAngVels",false)),
+    getParticleAngVels_(false),
     particleAngVels_(NULL),
     ddtVoidfraction_
     (   
@@ -300,6 +300,8 @@ Foam::cfdemCloud::cfdemCloud
         solveScalarTransport_=Switch(couplingProperties_.lookup("solveScalarTransport"));
     if (couplingProperties_.found("imExSplitFactor"))
         imExSplitFactor_ = readScalar(couplingProperties_.lookup("imExSplitFactor"));
+    if (couplingProperties_.found("getParticleAngVels"))
+        getParticleAngVels_=Switch(couplingProperties_.lookup("getParticleAngVels"));
 
     if(imExSplitFactor_>1.0)
             FatalError  << "You have set imExSplitFactor > 1 in your couplingProperties. Must be <=1."

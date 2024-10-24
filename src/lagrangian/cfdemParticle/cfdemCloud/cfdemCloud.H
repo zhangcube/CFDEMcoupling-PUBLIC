@@ -191,7 +191,9 @@ protected:
     mutable word useDDTvoidfraction_;
     
     mutable word passIndividualForce_;
-    const bool getParticleAngVels_;
+    
+    Switch getParticleAngVels_;
+    
     mutable double **particleAngVels_; // particle angular velocities
     
 

@@ -85,8 +85,6 @@ private:
 
     bool useSpinInduced_;
 
-    bool useSecondOrderTerms_;
-
     bool combineShearSpin_;
 
     scalar CL_;
@@ -126,3 +124,4 @@ public:
 #endif
 
 // ************************************************************************* //
+
