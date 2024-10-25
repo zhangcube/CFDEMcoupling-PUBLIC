@@ -61,6 +61,7 @@ $(forceModels)/BenyasemiDrag/BenyasemiDrag.C
 $(forceModels)/BrownLawlerDrag/BrownLawlerDrag.C
 $(forceModels)/AbrahamDrag/AbrahamDrag.C
 $(forceModels)/KochHillDrag/KochHillDrag.C
+$(forceModels)/KochHillRWDrag/KochHillRWDrag.C
 $(forceModels)/LaEuScalarTemp/LaEuScalarTemp.C
 $(forceModels)/MeiLift/MeiLift.C
 $(forceModels)/ZhangLift/ZhangLift.C
