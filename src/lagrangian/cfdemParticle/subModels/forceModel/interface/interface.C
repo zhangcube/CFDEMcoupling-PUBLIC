@@ -104,6 +104,7 @@ void interface::setForce() const
 {
     #include "resetAlphaInterpolator.H"
     #include "resetGradAlphaInterpolator.H"
+    volVectorField a = gradAlpha_/max(mag(gradAlpha_),dimensionedScalar("a",dimensionSet(0,-1,0,0,0), SMALL));
 
     for(int index = 0;index <  particleCloud_.numberOfParticles(); ++index)
     {
@@ -113,12 +114,20 @@ void interface::setForce() const
             scalar dp = 2*particleCloud_.radius(index);
             vector position = particleCloud_.position(index);
             label cellI = particleCloud_.cellIDs()[index][0];
-
+            
+            
             if(cellI >-1.0) // particle found on proc domain
             {
                 scalar alphap;
                 vector magGradAlphap;
+                // Initialize an interfaceForce vector
+                vector interfaceForce = Foam::vector(0,0,0);
 
+                // Calculate the interfaceForce (range of alphap needed for stability)
+
+                if ((alphaThreshold_-deltaAlphaIn_) < alphap && alphap < (alphaThreshold_+deltaAlphaOut_))
+                {
+                //Info << "within threshold limits" << endl;
                 if(forceSubM(0).interpolation()) // use intepolated values for alpha (normally off!!!)
                 {
                     // make interpolation object for alpha
@@ -137,19 +146,9 @@ void interface::setForce() const
                     //magGradAlphap = a[cellI];
 
                     alphap = alpha_[cellI];
-                    volVectorField a = gradAlpha_/
-                                       max(mag(gradAlpha_),dimensionedScalar("a",dimensionSet(0,-1,0,0,0), SMALL));
                     magGradAlphap = a[cellI];
                 }
 
-                // Initialize an interfaceForce vector
-                vector interfaceForce = Foam::vector(0,0,0);
-
-                // Calculate the interfaceForce (range of alphap needed for stability)
-
-                if ((alphaThreshold_-deltaAlphaIn_) < alphap && alphap < (alphaThreshold_+deltaAlphaOut_))
-                {
-                    Info << "within threshold limits" << endl;
                     // Calculate estimate attachment force as
                     // |6*sigma*sin(pi-theta/2)*sin(pi+theta/2)|*2*pi*dp
                     scalar Fatt =   mag(
@@ -165,18 +164,6 @@ void interface::setForce() const
                          * tanh(alphap-alphaThreshold_)
                          * Fatt
                          * C_;
-                }
-
-                if(true && mag(interfaceForce) > 0)
-                {
-                Info << "dp = " << dp << endl;
-                Info << "position = " << position << endl;
-                Info << "cellI = " << cellI << endl;
-                Info << "alpha cell = " << alpha_[cellI] << endl;
-                Info << "alphap = " << alphap << endl;
-                Info << "magGradAlphap = " << magGradAlphap << endl;
-                Info << "interfaceForce = " << interfaceForce << endl;
-                Info << "mag(interfaceForce) = " << mag(interfaceForce) << endl;
                 }
 
                 // limit interface force
