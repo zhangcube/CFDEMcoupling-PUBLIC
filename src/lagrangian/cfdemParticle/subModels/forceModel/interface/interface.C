@@ -104,7 +104,7 @@ void interface::setForce() const
 {
     #include "resetAlphaInterpolator.H"
     #include "resetGradAlphaInterpolator.H"
-    volVectorField a = gradAlpha_/max(mag(gradAlpha_),dimensionedScalar("a",dimensionSet(0,-1,0,0,0), SMALL));
+    //volVectorField a = gradAlpha_/max(mag(gradAlpha_),dimensionedScalar("a",dimensionSet(0,-1,0,0,0), SMALL));
 
     for(int index = 0;index <  particleCloud_.numberOfParticles(); ++index)
     {
@@ -114,12 +114,12 @@ void interface::setForce() const
             scalar dp = 2*particleCloud_.radius(index);
             vector position = particleCloud_.position(index);
             label cellI = particleCloud_.cellIDs()[index][0];
-            
-            
+
             if(cellI >-1.0) // particle found on proc domain
             {
                 scalar alphap;
                 vector magGradAlphap;
+                vector gradAlpha(0,0,0);
                 // Initialize an interfaceForce vector
                 vector interfaceForce = Foam::vector(0,0,0);
 
@@ -130,12 +130,12 @@ void interface::setForce() const
                 //Info << "within threshold limits" << endl;
                 if(forceSubM(0).interpolation()) // use intepolated values for alpha (normally off!!!)
                 {
-                    // make interpolation object for alpha
+                    /*// make interpolation object for alpha
                     alphap = alphaInterpolator_().interpolate(position,cellI);
 
                     // make interpolation object for grad(alpha)/|grad(alpha)|
                     vector gradAlphap = gradAlphaInterpolator_().interpolate(position,cellI);
-                    magGradAlphap = gradAlphap/max(mag(gradAlphap),SMALL);
+                    magGradAlphap = gradAlphap/max(mag(gradAlphap),SMALL);*/
                 }
                 else // use cell centered values for alpha
                 {
@@ -146,24 +146,23 @@ void interface::setForce() const
                     //magGradAlphap = a[cellI];
 
                     alphap = alpha_[cellI];
-                    magGradAlphap = a[cellI];
+                    //magGradAlphap = a[cellI];
+                    gradAlpha = gradAlpha_[cellI];
                 }
-
+            scalar Vs = particleCloud_.particleVolume(index);
+            scalar rhop = particleCloud_.density(index);
                     // Calculate estimate attachment force as
                     // |6*sigma*sin(pi-theta/2)*sin(pi+theta/2)|*2*pi*dp
-                    scalar Fatt =   mag(
-                                   6
-                                 * sigma_
-                                 * sin(M_PI - theta_/2)
-                                 * sin(M_PI + theta_/2)
-                            )
-                      * M_PI
-                      * dp;
+                    /*scalar Fatt =   mag(6
+                                * sigma_
+                                * sin(M_PI - theta_/2)
+                                * sin(M_PI + theta_/2)
+                                )
+                                * M_PI
+                                * dp;*/
 
-                    interfaceForce = - magGradAlphap
-                         * tanh(alphap-alphaThreshold_)
-                         * Fatt
-                         * C_;
+                    //interfaceForce = - magGradAlphap* tanh(alphap-alphaThreshold_)* Fatt* C_;
+                    interfaceForce = -C_*Vs*rhop*gradAlpha;
                 }
 
                 // limit interface force

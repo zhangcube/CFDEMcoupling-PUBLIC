@@ -102,6 +102,7 @@ Foam::cfdemCloud::cfdemCloud
     Archimedes_(NULL),
     Cds_(NULL),
     radii_(NULL),
+    density_(NULL),
     voidfractions_(NULL),
     cellIDs_(NULL),
     particleWeights_(NULL),
@@ -477,6 +478,7 @@ Foam::cfdemCloud::~cfdemCloud()
     dataExchangeM().destroy(Archimedes_,3);
     dataExchangeM().destroy(Cds_,1);
     dataExchangeM().destroy(radii_,1);
+    dataExchangeM().destroy(density_,1);
     dataExchangeM().destroy(voidfractions_,1);
     dataExchangeM().destroy(cellIDs_,1);
     dataExchangeM().destroy(particleWeights_,1);
@@ -500,6 +502,7 @@ void Foam::cfdemCloud::getDEMdata()
 {
     if(verbose_) Info << "Foam::cfdemCloud::getDEMdata()" << endl;
     dataExchangeM().getData("radius","scalar-atom",radii_);
+    dataExchangeM().getData("density","scalar-atom",density_);
     dataExchangeM().getData("x","vector-atom",positions_);
     dataExchangeM().getData("v","vector-atom",velocities_);
 
@@ -918,6 +921,7 @@ bool Foam::cfdemCloud::reAllocArrays() const
         dataExchangeM().allocateArray(Archimedes_,0.,3);
         dataExchangeM().allocateArray(Cds_,0.,1);
         dataExchangeM().allocateArray(radii_,0.,1);
+        dataExchangeM().allocateArray(density_,0.,1);
         dataExchangeM().allocateArray(voidfractions_,1.,voidFractionM().maxCellsPerParticle());
         dataExchangeM().allocateArray(cellIDs_,-1.,voidFractionM().maxCellsPerParticle());
         dataExchangeM().allocateArray(particleWeights_,0.,voidFractionM().maxCellsPerParticle());
@@ -958,6 +962,7 @@ bool Foam::cfdemCloud::reAllocArrays(int nP, bool forceRealloc) const
         dataExchangeM().allocateArray(Archimedes_,0.,3,nP);
         dataExchangeM().allocateArray(Cds_,0.,1,nP);
         dataExchangeM().allocateArray(radii_,0.,1,nP);
+        dataExchangeM().allocateArray(density_,0.,1,nP);
         dataExchangeM().allocateArray(voidfractions_,1.,voidFractionM().maxCellsPerParticle(),nP);
         dataExchangeM().allocateArray(cellIDs_,0.,voidFractionM().maxCellsPerParticle(),nP);
         dataExchangeM().allocateArray(particleWeights_,0.,voidFractionM().maxCellsPerParticle(),nP);
