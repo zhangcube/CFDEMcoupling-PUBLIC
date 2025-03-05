@@ -67,7 +67,8 @@ KochHillDrag::KochHillDrag
     voidfractionFieldName_(propsDict_.lookup("voidfractionFieldName")),
     voidfraction_(sm.mesh().lookupObject<volScalarField> (voidfractionFieldName_)),
     UsFieldName_(propsDict_.lookupOrDefault("granVelFieldName",word("Us"))),
-    UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_))
+    UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_)),
+    epslim_(readScalar(propsDict_.lookup("epslim")))
 {
     // suppress particle probe
     if (probeIt_ && propsDict_.found("suppressProbe"))
@@ -240,7 +241,8 @@ void KochHillDrag::setForce() const
                     dragCoefficient = Vs*betaP;
                     if (modelType_=="B")
                         dragCoefficient /= voidfraction;
-
+                    if (voidfraction < epslim_)   
+                        dragCoefficient = 0;
                     forceSubM(0).scaleCoeff(dragCoefficient,dParcel,index);
 
                     if(forceSubM(0).switches()[7]) // implForceDEMaccumulated=true
@@ -293,7 +295,7 @@ void KochHillDrag::setForce() const
             }
 
             // write particle based data to global array
-            forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient);
+            forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient,voidfraction);
             forceSubM(0).passDragOnlyForce(index,drag);
     }
 }

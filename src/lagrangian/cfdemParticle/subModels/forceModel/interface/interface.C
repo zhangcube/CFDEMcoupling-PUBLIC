@@ -64,8 +64,8 @@ interface::interface
     propsDict_(dict.subDict(typeName + "Props")),
     VOFvoidfractionFieldName_(propsDict_.lookup("VOFvoidfractionFieldName")),
     alpha_(sm.mesh().lookupObject<volScalarField> (VOFvoidfractionFieldName_)),
-    gradAlphaName_(propsDict_.lookup("gradAlphaName")),
-    gradAlpha_(sm.mesh().lookupObject<volVectorField> (gradAlphaName_)),
+    //gradAlphaName_(propsDict_.lookup("gradAlphaName")),
+    //gradAlpha_(sm.mesh().lookupObject<volVectorField> (gradAlphaName_)),
     sigma_(readScalar(propsDict_.lookup("sigma"))),
     theta_(readScalar(propsDict_.lookup("theta"))),
     alphaThreshold_(readScalar(propsDict_.lookup("alphaThreshold"))),
@@ -102,6 +102,8 @@ interface::~interface()
 
 void interface::setForce() const
 {
+    volVectorField gradAlpha_ = fvc::grad(alpha_);
+
     #include "resetAlphaInterpolator.H"
     #include "resetGradAlphaInterpolator.H"
     //volVectorField a = gradAlpha_/max(mag(gradAlpha_),dimensionedScalar("a",dimensionSet(0,-1,0,0,0), SMALL));
@@ -117,17 +119,12 @@ void interface::setForce() const
 
             if(cellI >-1.0) // particle found on proc domain
             {
-                scalar alphap;
-                vector magGradAlphap;
+                scalar alphap(0);
+                //vector magGradAlphap;
                 vector gradAlpha(0,0,0);
                 // Initialize an interfaceForce vector
                 vector interfaceForce = Foam::vector(0,0,0);
 
-                // Calculate the interfaceForce (range of alphap needed for stability)
-
-                if ((alphaThreshold_-deltaAlphaIn_) < alphap && alphap < (alphaThreshold_+deltaAlphaOut_))
-                {
-                //Info << "within threshold limits" << endl;
                 if(forceSubM(0).interpolation()) // use intepolated values for alpha (normally off!!!)
                 {
                     /*// make interpolation object for alpha
@@ -151,6 +148,13 @@ void interface::setForce() const
                 }
             scalar Vs = particleCloud_.particleVolume(index);
             scalar rhop = particleCloud_.density(index);
+
+            
+            // Calculate the interfaceForce (range of alphap needed for stability)
+
+            if ((alphaThreshold_-deltaAlphaIn_) < alphap && alphap < (alphaThreshold_+deltaAlphaOut_))
+            {
+            //Info << "within threshold limits" << endl;
                     // Calculate estimate attachment force as
                     // |6*sigma*sin(pi-theta/2)*sin(pi+theta/2)|*2*pi*dp
                     /*scalar Fatt =   mag(6
@@ -163,7 +167,7 @@ void interface::setForce() const
 
                     //interfaceForce = - magGradAlphap* tanh(alphap-alphaThreshold_)* Fatt* C_;
                     interfaceForce = -C_*Vs*rhop*gradAlpha;
-                }
+            }
 
                 // limit interface force
                 /*scalar rhoP=3000;

@@ -135,10 +135,14 @@ protected:
     mutable double **virtualMassForce_;
 
     mutable double **interfaceForce_;
+
+    mutable double **SeepageForce_;
     
     mutable double **Archimedes_;
 
     mutable double **Cds_;
+
+    mutable double **eps_;
 
     mutable double **radii_;
 
@@ -397,9 +401,13 @@ public:
 
        inline double ** interfaceForce() const;
 
+       inline double ** SeepageForce() const;
+
        inline double ** Archimedes() const;
 
        inline double ** Cds() const;
+
+       inline double ** eps() const;
 
        inline double ** radii() const;
 

@@ -176,7 +176,6 @@ void gradPForce::setForce() const
                     force = -Vs*gradP*rho*(1.0+addedMassCoeff_);
                 else
                     force = -Vs*gradP*(1.0+addedMassCoeff_);
-
                 if(forceSubM(0).verbose() && index >=0 && index <2)
                 {
                     Info << "index = " << index << endl;

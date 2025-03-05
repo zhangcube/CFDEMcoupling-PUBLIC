@@ -76,6 +76,8 @@ private:
 
     const volVectorField& UsField_;
 
+    const scalar epslim_;
+
 public:
 
     //- Runtime type information

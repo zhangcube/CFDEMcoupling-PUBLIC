@@ -99,10 +99,12 @@ Foam::cfdemCloud::cfdemCloud
     liftForce_(NULL),
     virtualMassForce_(NULL),
     interfaceForce_(NULL),
+    SeepageForce_(NULL),
     Archimedes_(NULL),
     Cds_(NULL),
     radii_(NULL),
     density_(NULL),
+    eps_(NULL),
     voidfractions_(NULL),
     cellIDs_(NULL),
     particleWeights_(NULL),
@@ -475,10 +477,12 @@ Foam::cfdemCloud::~cfdemCloud()
     dataExchangeM().destroy(liftForce_,3);
     dataExchangeM().destroy(virtualMassForce_,3);
     dataExchangeM().destroy(interfaceForce_,3);
+    dataExchangeM().destroy(SeepageForce_,3);
     dataExchangeM().destroy(Archimedes_,3);
     dataExchangeM().destroy(Cds_,1);
     dataExchangeM().destroy(radii_,1);
     dataExchangeM().destroy(density_,1);
+    dataExchangeM().destroy(eps_,1);
     dataExchangeM().destroy(voidfractions_,1);
     dataExchangeM().destroy(cellIDs_,1);
     dataExchangeM().destroy(particleWeights_,1);
@@ -516,6 +520,7 @@ void Foam::cfdemCloud::giveDEMdata()
 {
 
     dataExchangeM().giveData("dragforce","vector-atom",DEMForces_);
+    dataExchangeM().giveData("voidfraction","scalar-atom",eps_);
     
     if(passIndividualForce_ == word("on"))
     {
@@ -525,6 +530,7 @@ void Foam::cfdemCloud::giveDEMdata()
         dataExchangeM().giveData("liftForce","vector-atom",liftForce_);
         dataExchangeM().giveData("virtualMassForce","vector-atom",virtualMassForce_);
         dataExchangeM().giveData("interfaceForce","vector-atom",interfaceForce_);
+        dataExchangeM().giveData("SeepageForce","vector-atom",SeepageForce_);
         dataExchangeM().giveData("Archimedes","vector-atom",Archimedes_);
     }
 
@@ -532,6 +538,7 @@ void Foam::cfdemCloud::giveDEMdata()
     {
         if(verbose_) Info << "sending Ksl and uf" << endl;
         dataExchangeM().giveData("Ksl","scalar-atom",Cds_);
+        
         dataExchangeM().giveData("uf","vector-atom",fluidVel_);
     }
     if(verbose_) Info << "giveDEMdata done." << endl;
@@ -599,8 +606,10 @@ void Foam::cfdemCloud::setForces()
     resetArray(liftForce_,numberOfParticles(),3);
     resetArray(virtualMassForce_,numberOfParticles(),3);
     resetArray(interfaceForce_,numberOfParticles(),3);
+    resetArray(SeepageForce_,numberOfParticles(),3);
     resetArray(Archimedes_,numberOfParticles(),3);
     resetArray(Cds_,numberOfParticles(),1);
+    resetArray(eps_,numberOfParticles(),1);
 
     //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
     //reset all USER-defined particle fields
@@ -767,7 +776,7 @@ bool Foam::cfdemCloud::evolve
 		if(!writeTimePassed_ && mesh_.time().outputTime())
 		{writeTimePassed_=true;}
 		else
-		{ writeTimePassed_=false;}
+		{writeTimePassed_=false;}
         if (dataExchangeM().doCoupleNow())
         {
             Info << "\n Coupling..." << endl;
@@ -918,8 +927,10 @@ bool Foam::cfdemCloud::reAllocArrays() const
         dataExchangeM().allocateArray(liftForce_,0.,3);
         dataExchangeM().allocateArray(virtualMassForce_,0.,3);
         dataExchangeM().allocateArray(interfaceForce_,0.,3);
+        dataExchangeM().allocateArray(SeepageForce_,0.,3);
         dataExchangeM().allocateArray(Archimedes_,0.,3);
         dataExchangeM().allocateArray(Cds_,0.,1);
+        dataExchangeM().allocateArray(eps_,0.,1);
         dataExchangeM().allocateArray(radii_,0.,1);
         dataExchangeM().allocateArray(density_,0.,1);
         dataExchangeM().allocateArray(voidfractions_,1.,voidFractionM().maxCellsPerParticle());
@@ -959,8 +970,10 @@ bool Foam::cfdemCloud::reAllocArrays(int nP, bool forceRealloc) const
         dataExchangeM().allocateArray(liftForce_,0.,3,nP);
         dataExchangeM().allocateArray(virtualMassForce_,0.,3,nP);
         dataExchangeM().allocateArray(interfaceForce_,0.,3,nP);
+        dataExchangeM().allocateArray(SeepageForce_,0.,3,nP);
         dataExchangeM().allocateArray(Archimedes_,0.,3,nP);
         dataExchangeM().allocateArray(Cds_,0.,1,nP);
+        dataExchangeM().allocateArray(eps_,0.,1,nP);
         dataExchangeM().allocateArray(radii_,0.,1,nP);
         dataExchangeM().allocateArray(density_,0.,1,nP);
         dataExchangeM().allocateArray(voidfractions_,1.,voidFractionM().maxCellsPerParticle(),nP);

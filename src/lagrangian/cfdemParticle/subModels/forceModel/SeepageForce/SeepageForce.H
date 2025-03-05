@@ -29,15 +29,15 @@ Description
     and OpenFOAM(R). Note: this code is not part of OpenFOAM(R) (see DISCLAIMER).
 
 Class
-    interface
+    SeepageForce
 
 SourceFiles
-    interface.C
+    SeepageForce.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef interface_H
-#define interface_H
+#ifndef SeepageForce_H
+#define SeepageForce_H
 
 #include "forceModel.H"
 #include "interpolationCellPoint.H"
@@ -48,10 +48,10 @@ namespace Foam
 {
 
 /*---------------------------------------------------------------------------*\
-                           Class interface Declaration
+                           Class SeepageForce Declaration
 \*---------------------------------------------------------------------------*/
 
-class interface
+class SeepageForce
 :
     public forceModel
 {
@@ -66,30 +66,44 @@ private:
 
     //const volVectorField& gradAlpha_;    // ref to fvc::grad(VOF voidfraction)
 
-    const scalar sigma_;
+    const scalar mu1;
 
-    const scalar theta_;
+    const scalar mu2;
 
-    const scalar alphaThreshold_;
+    const scalar rho1;
 
-    const scalar  deltaAlphaIn_;
+    const scalar rho2;
 
-    const scalar  deltaAlphaOut_;
+    const scalar epslim_;
 
-    scalar C_; // model constant
+    word velFieldName_;
+
+    const volVectorField& U_;
+
+    word voidfractionFieldName_;
+
+    const volScalarField& voidfraction_;
+
+    word UsFieldName_;   
+
+    const volVectorField& UsField_;
+
+    word KpermeabilityName_;   
+
+    const volScalarField& Kpermeability;
 
     bool interpolation_; // use interpolated field values (does not work for fine grids???)
 
 public:
 
     //- Runtime type information
-    TypeName("interface");
+    TypeName("SeepageForce");
 
 
     // Constructors
 
         //- Construct from components
-        interface
+        SeepageForce
         (
             const dictionary& dict,
             cfdemCloud& sm
@@ -97,7 +111,7 @@ public:
 
     // Destructor
 
-        ~interface();
+        ~SeepageForce();
 
 
     // Member Functions

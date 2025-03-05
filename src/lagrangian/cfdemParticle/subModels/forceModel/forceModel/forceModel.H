@@ -224,11 +224,15 @@ public:
 
         inline double ** interfaceForce() const { return particleCloud_.interfaceForce_;};
 
+        inline double ** SeepageForce() const { return particleCloud_.SeepageForce_;};
+
         inline double ** dragOnlyForce() const { return particleCloud_.dragOnlyForce_;};
         
         inline double ** DEMTorques() const { return particleCloud_.DEMTorques();};
 
         inline double ** Cds() const { return particleCloud_.Cds_;};
+
+        inline double ** eps() const { return particleCloud_.eps_;};
 
         inline double ** CdsExtra() const { return particleCloud_.CdsExtra();};
 

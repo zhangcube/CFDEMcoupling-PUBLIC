@@ -184,7 +184,8 @@ void forceSubModel::partToArray
     const vector& dragTot,
     const vector& dragEx,
     const vector& Ufluid,
-    scalar Cd
+    scalar Cd,
+    scalar eps
 ) const
 {
     // forces for CFD
@@ -218,6 +219,7 @@ void forceSubModel::partToArray
         for(int j=0;j<3;j++) 
             myForceM().DEMForces()[index][j] += dragTot[j];
     }
+    myForceM().eps()[index][0]=eps;
 }
 
 void forceSubModel::passGradPForce
@@ -290,7 +292,15 @@ void forceSubModel::passInterfaceForce
         myForceM().interfaceForce()[index][j] += force[j];
 }
 
-
+void forceSubModel::passSeepageForce
+(
+    const label& index,
+    const vector& force
+) const
+{
+    for(int j=0;j<3;j++)
+        myForceM().SeepageForce()[index][j] += force[j];
+}
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 void forceSubModel::partToArrayAnisotropic
 (

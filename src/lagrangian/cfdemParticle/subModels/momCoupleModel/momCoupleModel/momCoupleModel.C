@@ -92,7 +92,7 @@ momCoupleModel::momCoupleModel
 :
     dict_(dict),
     particleCloud_(sm),
-    maxAlpha_(1-SMALL)
+    maxAlpha_(0)
 {}
 
 

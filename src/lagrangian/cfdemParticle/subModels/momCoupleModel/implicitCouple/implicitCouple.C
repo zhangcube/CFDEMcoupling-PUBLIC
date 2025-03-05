@@ -105,10 +105,10 @@ implicitCouple::implicitCouple
         Info << "implicit momentum exchange field is limited to : " << KslLimit_ << endl;
     }
 
-    if (propsDict_.found("minAlphaP"))
-        maxAlpha_ = 1-readScalar(propsDict_.lookup ("minAlphaP"));
+    if (propsDict_.found("epslim"))
+        maxAlpha_ = readScalar(propsDict_.lookup ("epslim"));
 
-    Info << "implicit momentum exchange field calculate if alphaP larger than : " <<  maxAlpha_ << endl;
+    Info << "implicit momentum exchange switched off if alphaP larger than : " <<  maxAlpha_ << endl;
 }
 
 
@@ -147,7 +147,7 @@ tmp<volScalarField> implicitCouple::impMomSource() const
         {
             Ur = mag(U_[cellI] - Us_[cellI]);
 
-            if(Ur > SMALL && alpha_[cellI] < maxAlpha_) //momentum exchange switched off if alpha too big
+            if(Ur > SMALL && alpha_[cellI] > maxAlpha_) //momentum exchange switched on if alpha exceeds maxAlpha
             {
                 // NOTE: impParticleForces() are calculated at coupling step based on current values
                 //       therefore the us of Next fields in forceM and here is recommended
@@ -155,7 +155,7 @@ tmp<volScalarField> implicitCouple::impMomSource() const
                             / Ur
                             / particleCloud_.mesh().V()[cellI];
             }
-            else KslNext_[cellI] = 0;
+            else KslNext_[cellI] = 0; //momentum exchange switched on if alpha less than maxAlpha
 
             // limiter
             if (KslNext_[cellI] > KslLimit_) KslNext_[cellI] = KslLimit_;

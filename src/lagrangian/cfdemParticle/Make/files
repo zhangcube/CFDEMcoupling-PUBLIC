@@ -56,6 +56,8 @@ $(forceModels)/forceModel/newForceModel.C
 $(forceModels)/GidaspowDrag/GidaspowDrag.C
 $(forceModels)/gradPForce/gradPForce.C
 $(forceModels)/interface/interface.C
+$(forceModels)/SeepageForce/SeepageForce.C
+$(forceModels)/surfaceTensionForce/surfaceTensionForce.C
 $(forceModels)/BenyahiaDrag/BenyahiaDrag.C
 $(forceModels)/BenyasemiDrag/BenyasemiDrag.C
 $(forceModels)/BrownLawlerDrag/BrownLawlerDrag.C
