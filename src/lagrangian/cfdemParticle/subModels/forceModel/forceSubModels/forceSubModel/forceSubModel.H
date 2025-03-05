@@ -161,8 +161,6 @@ public:
 
         void passInterfaceForce(const label&, const vector&) const;
 
-        void passSeepageForce(const label&, const vector&) const;
-
         //function to set anisotropic drag components for DEM side only.
         void partToArrayAnisotropic(const label&, const vector&, const vector& dragEx=vector::zero) const;
 

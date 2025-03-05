@@ -292,15 +292,6 @@ void forceSubModel::passInterfaceForce
         myForceM().interfaceForce()[index][j] += force[j];
 }
 
-void forceSubModel::passSeepageForce
-(
-    const label& index,
-    const vector& force
-) const
-{
-    for(int j=0;j<3;j++)
-        myForceM().SeepageForce()[index][j] += force[j];
-}
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 void forceSubModel::partToArrayAnisotropic
 (

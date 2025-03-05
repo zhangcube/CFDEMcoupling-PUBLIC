@@ -135,8 +135,6 @@ protected:
     mutable double **virtualMassForce_;
 
     mutable double **interfaceForce_;
-
-    mutable double **SeepageForce_;
     
     mutable double **Archimedes_;
 
@@ -400,8 +398,6 @@ public:
        inline double ** virtualMassForce() const;
 
        inline double ** interfaceForce() const;
-
-       inline double ** SeepageForce() const;
 
        inline double ** Archimedes() const;
 
