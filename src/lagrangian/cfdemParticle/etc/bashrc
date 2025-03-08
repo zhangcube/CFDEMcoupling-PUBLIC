@@ -14,7 +14,7 @@
 #- add this block to your ~/.bashrc and modify for your installation
 #- you can test the correctness using cfdemSystemTest.sh
 # activate compatible OpenFOAM version
-. $HOME/OpenFOAM/OpenFOAM-5.x/etc/bashrc
+#. $HOME/OpenFOAM/OpenFOAM-5.x/etc/bashrc
 ## STANDARD BLOCK FOR REGULAR INSTALLATIONS
 ##================================================#
 ##- source cfdem env vars

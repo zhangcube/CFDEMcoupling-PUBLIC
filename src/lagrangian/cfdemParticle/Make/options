@@ -32,6 +32,5 @@ LIB_LIBS = \
     -lmeshTools \
     -llagrangian \
     -Wl,--whole-archive -l$(CFDEM_LIGGGHTS_LIB_NAME) -Wl,--no-whole-archive \
-    -L$(FOAM_USER_LIBBIN) \
      $(CFDEM_ADD_LIB_PATHS) \
      $(CFDEM_ADD_STATICLIBS) 

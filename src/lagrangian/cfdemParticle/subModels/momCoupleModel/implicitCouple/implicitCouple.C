@@ -97,18 +97,14 @@ implicitCouple::implicitCouple
         //dimensionedScalar("zero", dimensionSet(1,-3,-1,0,0), 0)  // N/m3 / m/s
     )
 {
-    Info << "" << endl;
-
     if (propsDict_.found("KslLimit"))
     {
         KslLimit_=readScalar(propsDict_.lookup ("KslLimit"));
         Info << "implicit momentum exchange field is limited to : " << KslLimit_ << endl;
     }
-
     if (propsDict_.found("epslim"))
         maxAlpha_ = readScalar(propsDict_.lookup ("epslim"));
-
-    Info << "implicit momentum exchange switched off if alphaP larger than : " <<  maxAlpha_ << endl;
+    Info << "implicit momentum exchange switched off if alphaP smaller than : " <<  maxAlpha_ << endl;
 }
 
 
