@@ -67,7 +67,7 @@ KochHillDrag::KochHillDrag
     voidfractionFieldName_(propsDict_.lookup("voidfractionFieldName")),
     voidfraction_(sm.mesh().lookupObject<volScalarField> (voidfractionFieldName_)),
     UsFieldName_(propsDict_.lookupOrDefault("granVelFieldName",word("Us"))),
-    UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_)),
+    UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_))
 {
     // suppress particle probe
     if (probeIt_ && propsDict_.found("suppressProbe"))
