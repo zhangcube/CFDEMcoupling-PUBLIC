@@ -68,7 +68,6 @@ KochHillDrag::KochHillDrag
     voidfraction_(sm.mesh().lookupObject<volScalarField> (voidfractionFieldName_)),
     UsFieldName_(propsDict_.lookupOrDefault("granVelFieldName",word("Us"))),
     UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_)),
-    epslim_(readScalar(propsDict_.lookup("epslim")))
 {
     // suppress particle probe
     if (probeIt_ && propsDict_.found("suppressProbe"))
@@ -241,8 +240,7 @@ void KochHillDrag::setForce() const
                     dragCoefficient = Vs*betaP;
                     if (modelType_=="B")
                         dragCoefficient /= voidfraction;
-                    if (voidfraction < epslim_)   
-                        dragCoefficient = 0;
+
                     forceSubM(0).scaleCoeff(dragCoefficient,dParcel,index);
 
                     if(forceSubM(0).switches()[7]) // implForceDEMaccumulated=true

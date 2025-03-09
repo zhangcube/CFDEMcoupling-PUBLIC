@@ -58,7 +58,6 @@ $(forceModels)/gradPForce/gradPForce.C
 $(forceModels)/interface/interface.C
 $(forceModels)/surfaceTensionForce/surfaceTensionForce.C
 $(forceModels)/BenyahiaDrag/BenyahiaDrag.C
-$(forceModels)/BenyasemiDrag/BenyasemiDrag.C
 $(forceModels)/BrownLawlerDrag/BrownLawlerDrag.C
 $(forceModels)/AbrahamDrag/AbrahamDrag.C
 $(forceModels)/KochHillDrag/KochHillDrag.C

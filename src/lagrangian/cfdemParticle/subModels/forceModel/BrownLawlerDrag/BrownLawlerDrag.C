@@ -33,7 +33,7 @@ Description
 
 #include "BrownLawlerDrag.H"
 #include "addToRunTimeSelectionTable.H"
-
+#include "dataExchangeModel.H"
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
@@ -66,7 +66,7 @@ BrownLawlerDrag::BrownLawlerDrag
     U_(sm.mesh().lookupObject<volVectorField> (velFieldName_)),
     voidfractionFieldName_(propsDict_.lookup("voidfractionFieldName")),
     voidfraction_(sm.mesh().lookupObject<volScalarField> (voidfractionFieldName_)),
-    UsFieldName_(propsDict_.lookup("granVelFieldName")),
+    UsFieldName_(propsDict_.lookupOrDefault("granVelFieldName",word("Us"))),
     UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_))
 {
     // suppress particle probe
@@ -255,7 +255,7 @@ void BrownLawlerDrag::setForce() const
             }
 
             // write particle based data to global array
-            forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient);
+            forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient,voidfraction);
             forceSubM(0).passDragOnlyForce(index,drag);
         }
 }
