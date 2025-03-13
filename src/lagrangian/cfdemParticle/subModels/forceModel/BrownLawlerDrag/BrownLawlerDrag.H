@@ -68,6 +68,10 @@ private:
 
     const volScalarField& voidfraction_;
 
+    word VOFvoidfractionFieldName_;
+
+    const volScalarField& alpha_;    // ref to VOF voidfraction
+
     word UsFieldName_;   
 
     const volVectorField& UsField_;  // the average particle velocity field (for implicit/expliti force split)

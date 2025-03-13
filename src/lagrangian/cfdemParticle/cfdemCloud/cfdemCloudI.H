@@ -177,6 +177,11 @@ inline double ** cfdemCloud::eps() const
     return eps_;
 }
 
+inline double ** cfdemCloud::alphawater() const
+{
+    return alphawater_;
+}
+
 inline double ** cfdemCloud::radii() const
 {
     return radii_;

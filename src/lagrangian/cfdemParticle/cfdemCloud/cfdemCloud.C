@@ -104,6 +104,7 @@ Foam::cfdemCloud::cfdemCloud
     radii_(NULL),
     density_(NULL),
     eps_(NULL),
+    alphawater_(0),
     voidfractions_(NULL),
     cellIDs_(NULL),
     particleWeights_(NULL),
@@ -481,6 +482,7 @@ Foam::cfdemCloud::~cfdemCloud()
     dataExchangeM().destroy(radii_,1);
     dataExchangeM().destroy(density_,1);
     dataExchangeM().destroy(eps_,1);
+    dataExchangeM().destroy(alphawater_,1);
     dataExchangeM().destroy(voidfractions_,1);
     dataExchangeM().destroy(cellIDs_,1);
     dataExchangeM().destroy(particleWeights_,1);
@@ -519,6 +521,7 @@ void Foam::cfdemCloud::giveDEMdata()
 
     dataExchangeM().giveData("dragforce","vector-atom",DEMForces_);
     dataExchangeM().giveData("voidfraction","scalar-atom",eps_);
+    dataExchangeM().giveData("alphawater","scalar-atom",alphawater_);
     
     if(passIndividualForce_ == word("on"))
     {
@@ -606,6 +609,7 @@ void Foam::cfdemCloud::setForces()
     resetArray(Archimedes_,numberOfParticles(),3);
     resetArray(Cds_,numberOfParticles(),1);
     resetArray(eps_,numberOfParticles(),1);
+    resetArray(alphawater_,numberOfParticles(),1);
 
     //=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=
     //reset all USER-defined particle fields
@@ -926,6 +930,7 @@ bool Foam::cfdemCloud::reAllocArrays() const
         dataExchangeM().allocateArray(Archimedes_,0.,3);
         dataExchangeM().allocateArray(Cds_,0.,1);
         dataExchangeM().allocateArray(eps_,0.,1);
+        dataExchangeM().allocateArray(alphawater_,0.,1);
         dataExchangeM().allocateArray(radii_,0.,1);
         dataExchangeM().allocateArray(density_,0.,1);
         dataExchangeM().allocateArray(voidfractions_,1.,voidFractionM().maxCellsPerParticle());
@@ -968,6 +973,7 @@ bool Foam::cfdemCloud::reAllocArrays(int nP, bool forceRealloc) const
         dataExchangeM().allocateArray(Archimedes_,0.,3,nP);
         dataExchangeM().allocateArray(Cds_,0.,1,nP);
         dataExchangeM().allocateArray(eps_,0.,1,nP);
+        dataExchangeM().allocateArray(alphawater_,0.,1,nP);
         dataExchangeM().allocateArray(radii_,0.,1,nP);
         dataExchangeM().allocateArray(density_,0.,1,nP);
         dataExchangeM().allocateArray(voidfractions_,1.,voidFractionM().maxCellsPerParticle(),nP);

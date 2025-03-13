@@ -142,6 +142,8 @@ protected:
 
     mutable double **eps_;
 
+    mutable double **alphawater_;
+
     mutable double **radii_;
 
     mutable double **density_;
@@ -404,6 +406,8 @@ public:
        inline double ** Cds() const;
 
        inline double ** eps() const;
+
+       inline double ** alphawater() const;
 
        inline double ** radii() const;
 

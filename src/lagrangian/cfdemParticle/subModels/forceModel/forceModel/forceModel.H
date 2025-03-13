@@ -232,6 +232,8 @@ public:
 
         inline double ** eps() const { return particleCloud_.eps_;};
 
+        inline double ** alphawater() const { return particleCloud_.alphawater_;};
+
         inline double ** CdsExtra() const { return particleCloud_.CdsExtra();};
 
         inline double ** CdsRotation() const { return particleCloud_.CdsRotation();};

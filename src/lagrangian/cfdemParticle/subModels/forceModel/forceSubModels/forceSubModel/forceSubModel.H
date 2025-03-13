@@ -145,7 +145,7 @@ public:
 
 
     // Member Functions
-        void partToArray(const label&, const vector&, const vector&, const vector& Ufluid=vector::zero, scalar Cd=scalar(0), scalar eps=scalar(0)) const;
+        void partToArray(const label&, const vector&, const vector&, const vector& Ufluid=vector::zero, scalar Cd=scalar(0), scalar eps=scalar(0), scalar alphawater=scalar(0)) const;
 
         void passGradPForce(const label&, const vector&) const;
 

@@ -185,7 +185,8 @@ void forceSubModel::partToArray
     const vector& dragEx,
     const vector& Ufluid,
     scalar Cd,
-    scalar eps
+    scalar eps,
+    scalar alphawater
 ) const
 {
     // forces for CFD
@@ -220,6 +221,7 @@ void forceSubModel::partToArray
             myForceM().DEMForces()[index][j] += dragTot[j];
     }
     myForceM().eps()[index][0]=eps;
+    myForceM().alphawater()[index][0]=alphawater;
 }
 
 void forceSubModel::passGradPForce

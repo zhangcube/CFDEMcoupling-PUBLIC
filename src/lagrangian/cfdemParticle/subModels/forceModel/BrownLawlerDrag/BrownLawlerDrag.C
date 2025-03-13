@@ -66,6 +66,8 @@ BrownLawlerDrag::BrownLawlerDrag
     U_(sm.mesh().lookupObject<volVectorField> (velFieldName_)),
     voidfractionFieldName_(propsDict_.lookup("voidfractionFieldName")),
     voidfraction_(sm.mesh().lookupObject<volScalarField> (voidfractionFieldName_)),
+    VOFvoidfractionFieldName_(propsDict_.lookup("VOFvoidfractionFieldName")),
+    alpha_(sm.mesh().lookupObject<volScalarField> (VOFvoidfractionFieldName_)),
     UsFieldName_(propsDict_.lookupOrDefault("granVelFieldName",word("Us"))),
     UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_))
 {
@@ -120,6 +122,7 @@ void BrownLawlerDrag::setForce() const
 
     vector position(0,0,0);
     scalar voidfraction(1);
+    scalar alphawater(0);
     vector Ufluid(0,0,0);
     vector drag(0,0,0);
     vector dragExplicit(0,0,0);
@@ -137,12 +140,15 @@ void BrownLawlerDrag::setForce() const
 
     #include "resetVoidfractionInterpolator.H"
     #include "resetUInterpolator.H"
+    #include "resetAlphaInterpolator.H"
     #include "setupProbeModel.H"
 
     for(int index = 0;index <  particleCloud_.numberOfParticles(); index++)
     {
             cellI = particleCloud_.cellIDs()[index][0];
             drag = vector(0,0,0);
+            voidfraction = 0;
+            alphawater = 0;
             dragExplicit = vector(0,0,0);
             Ufluid =vector(0,0,0);
 
@@ -152,6 +158,7 @@ void BrownLawlerDrag::setForce() const
                 {
                     position = particleCloud_.position(index);
                     voidfraction = voidfractionInterpolator_().interpolate(position,cellI);
+                    alphawater = alphaInterpolator_().interpolate(position,cellI);
                     Ufluid = UInterpolator_().interpolate(position,cellI);
 
                     //Ensure interpolated void fraction to be meaningful
@@ -161,6 +168,7 @@ void BrownLawlerDrag::setForce() const
                 }else
                 {
                     voidfraction = voidfraction_[cellI];
+                    alphawater = alpha_[cellI];
                     Ufluid = U_[cellI];
                 }
 
@@ -255,7 +263,7 @@ void BrownLawlerDrag::setForce() const
             }
 
             // write particle based data to global array
-            forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient,voidfraction);
+            forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient,voidfraction,alphawater);
             forceSubM(0).passDragOnlyForce(index,drag);
         }
 }
