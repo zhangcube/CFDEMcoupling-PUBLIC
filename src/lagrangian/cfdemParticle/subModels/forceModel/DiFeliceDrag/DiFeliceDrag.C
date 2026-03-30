@@ -198,6 +198,7 @@ void DiFeliceDrag::setForce() const
         Ufluid=vector::zero;
         dragCoefficient = 0;
         alphawater = 0;  //modify by zlf
+        voidfraction=0;
 
         if (cellI > -1) // particle Found
         {

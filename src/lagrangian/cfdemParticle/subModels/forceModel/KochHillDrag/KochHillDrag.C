@@ -166,6 +166,7 @@ void KochHillDrag::setForce() const
         dragCoefficient=0;
         betaP = 0;
         Vs = 0;
+        alphawater = 0;  //modify by zlf
         voidfraction=0;
 
         if (cellI > -1) // particle Found
