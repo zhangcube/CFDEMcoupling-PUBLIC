@@ -70,6 +70,8 @@ GidaspowDrag::GidaspowDrag
     phi_(propsDict_.lookupOrDefault<scalar>("phi",1.)),
     UsFieldName_(propsDict_.lookupOrDefault<word>("granVelFieldName","Us")),
     UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_)),
+    VOFvoidfractionFieldName_(propsDict_.lookup("VOFvoidfractionFieldName")),  //modify by zlf
+    alpha_(sm.mesh().lookupObject<volScalarField> (VOFvoidfractionFieldName_)),  //modify by zlf
     switchingVoidfraction_(0.8)
 {
     // suppress particle probe
@@ -133,6 +135,7 @@ void GidaspowDrag::setForce() const
 
     vector position(0,0,0);
     scalar voidfraction(1);
+    scalar alphawater(0);    //modify by zlf
     vector Ufluid(0,0,0);
     vector drag(0,0,0);
     label cellI=0;
@@ -155,6 +158,7 @@ void GidaspowDrag::setForce() const
 
     #include "resetVoidfractionInterpolator.H"
     #include "resetUInterpolator.H"
+    #include "resetAlphaInterpolator.H"  //modify by zlf
     #include "setupProbeModel.H"
 
     for(int index = 0;index <  particleCloud_.numberOfParticles(); index++)
@@ -165,6 +169,7 @@ void GidaspowDrag::setForce() const
         Ufluid=vector::zero;
         betaP = 0;
         Vs = 0;
+        alphawater = 0;  //modify by zlf
         voidfraction=0;
         dragCoefficient = 0;
 
@@ -175,7 +180,7 @@ void GidaspowDrag::setForce() const
                 position = particleCloud_.cfdemCloud::position(index);
                 voidfraction = voidfractionInterpolator_().interpolate(position,cellI);
                 Ufluid = UInterpolator_().interpolate(position,cellI);
-
+                alphawater = alphaInterpolator_().interpolate(position,cellI);  //modify by zlf
                 //Ensure interpolated void fraction to be meaningful
                 // Info << " --> voidfraction: " << voidfraction << endl;
                 if(voidfraction>1.00) voidfraction = 1.0;
@@ -184,6 +189,7 @@ void GidaspowDrag::setForce() const
             {
                 voidfraction = voidfraction_[cellI];
                 Ufluid = U_[cellI];
+                alphawater = alpha_[cellI];  //modify by zlf
             }
 
             // correct voidfraction
@@ -286,7 +292,8 @@ void GidaspowDrag::setForce() const
         }
 
         // write particle based data to global array
-        forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient);
+        forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient,vector::zero,voidfraction,alphawater);  //modify by zlf
+        //forceSubM(0).passDragOnlyForce(index,drag);
     }
 }
 

@@ -604,6 +604,8 @@ public:
         mutable int idQuat_; // id of quaternion in DEM in modular data exchange framework
         mutable int idK_; // id of turbulence k in DEM in modular data exchange framework
         mutable int idEpsilon_; // id of turbulence epsilon in DEM in modular data exchange framework
+        mutable int idVoidfraction_; // id of particle voidfraction in DEM in modular data exchange framework   //modify by zlf
+        mutable int idAlphawater_; // id of particle alphawater in DEM in modular data exchange framework     //modify by zlf
         mutable int idParticleCG_; // id of particle specifig CG factor in DEM in modular data exchange framework
         mutable int idMass_; // id of convex volume in DEM in modular data exchange framework
         mutable int idDensity_; // id of convex volume in DEM in modular data exchange framework
@@ -640,6 +642,8 @@ public:
         int& idQuat() const {return idQuat_;};
         int& idK() const {return idK_;};
         int& idEpsilon() const {return idEpsilon_;};
+        int& idVoidfraction() const {return idVoidfraction_;};  //modify by zlf
+        int& idAlphawater() const {return idAlphawater_;};  //modify by zlf
         int& idParticleCG() const {return idParticleCG_;};
         int& idMass() const {return idMass_;};
         int& idDensity() const {return idDensity_;};

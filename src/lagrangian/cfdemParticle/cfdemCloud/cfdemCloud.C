@@ -283,6 +283,8 @@ Foam::cfdemCloud::cfdemCloud
     idQuat_(-1),
     idK_(-1),
     idEpsilon_(-1),
+    idVoidfraction_(-1),  //modify by zlf
+    idAlphawater_(-1),  //modify by zlf
     idParticleCG_(-1),
     idMass_(-1),
     idDensity_(-1),

@@ -143,9 +143,9 @@ void MeiLift::setForce() const
     scalar alphaStar(0);
     scalar epsilon(0);
     scalar omega_star(0);
-    vector vorticity_fluid(0,0,0);
+    scalar magOmegaCrossUr(0);
     vector omegaParticle(0,0,0);
-    volVectorField vorticity_ = fvc::curl(U_);
+    vector omegaCrossUr(0,0,0);
 
     #include "resetVorticityInterpolator.H"
     #include "resetUInterpolator.H"
@@ -167,13 +167,12 @@ void MeiLift::setForce() const
                 position       = particleCloud_.cfdemCloud::position(index);
                 Ur               = UInterpolator_().interpolate(position,cellI)
                                     - Us;
-//                 vorticity       = vorticityInterpolator_().interpolate(position,cellI);
             }
             else
             {
                 Ur =  U_[cellI]
                       - Us;
-//                 vorticity=vorticity_[cellI];
+
             }
 
             magUr        = mag(Ur);
@@ -238,12 +237,19 @@ void MeiLift::setForce() const
                     Cl += Omega_eq*Cl_star;
                 }
 
-                lift =  0.125*M_PI
-                       *rho
-                       *Cl
-                       //*magUr*Ur^vorticity/magVorticity
-                       *magUr*magUr*omegaParticle^Ur/mag(omegaParticle^Ur)
-                       *ds*ds; //total force on all particles in parcel
+                omegaCrossUr = omegaParticle^Ur;
+                if (magOmegaCrossUr > 0)
+                {
+                    lift = 0.125*M_PI
+                           *rho
+                           *Cl
+                           *magUr*magUr*omegaCrossUr/magOmegaCrossUr
+                           *ds*ds; //total force on all particles in parcel
+                }
+                else
+                {
+                    lift = vector::zero;
+                }
 
                 forceSubM(0).scaleForce(lift,dParcel,index);
 

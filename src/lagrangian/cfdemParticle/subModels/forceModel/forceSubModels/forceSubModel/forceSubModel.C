@@ -224,7 +224,9 @@ void forceSubModel::partToArray
     const vector& dragEx,
     const vector& Ufluid,
     scalar Cd,
-    const vector& CdExtra
+    const vector& CdExtra,
+    scalar eps,
+    scalar alphawater
 ) const
 {
     // forces for CFD
@@ -294,6 +296,8 @@ void forceSubModel::partToArray
                 particleCloud_.fieldsToDEM[particleCloud_.idDragExp()][index][j] += dragTot[j];
         }
     }
+    particleCloud_.fieldsToDEM[particleCloud_.idVoidfraction()][index][0] = eps;   //modify by zlf
+    particleCloud_.fieldsToDEM[particleCloud_.idAlphawater()][index][0]=alphawater;   //modify by zlf
 }
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -443,7 +447,7 @@ void forceSubModel::scaleTorque(vector& torque) const
     torque *= scaleTorque_;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-const scalar forceSubModel::scaleDrag(int index) const
+scalar forceSubModel::scaleDrag(int index) const  //modify by zlf
 {
     return particleCloud_.cg(index);
 }
@@ -600,6 +604,8 @@ void forceSubModel::setupCommunication() const
     particleCloud_.registerFieldsToDEM("radius","scalar-atom",particleCloud_.idRadius(),true);
     particleCloud_.registerFieldsToDEM("x","vector-atom",particleCloud_.idPos(),true);
     particleCloud_.registerFieldsToDEM("v","vector-atom",particleCloud_.idVel(),true);
+    particleCloud_.registerFieldsToDEM("voidfraction","scalar-atom",particleCloud_.idVoidfraction());  //modify by zlf
+    particleCloud_.registerFieldsToDEM("alphawater","scalar-atom",particleCloud_.idAlphawater());      //modify by zlf
 
     if(particleCloud_.impDEMdragAcc())
         particleCloud_.registerFieldsToDEM("dragAcc","vector-atom",particleCloud_.idFacc(),true);

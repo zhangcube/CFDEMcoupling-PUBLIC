@@ -65,6 +65,7 @@ constDiffSmoothing::constDiffSmoothing
     propsDict_(dict.subDict(typeName + "Props")),
     lowerLimit_(readScalar(propsDict_.lookup("lowerLimit"))),
     upperLimit_(readScalar(propsDict_.lookup("upperLimit"))),
+    epslim_(readScalar(propsDict_.lookup("epslim"))),    //modify by zlf
     smoothingLength_(dimensionedScalar("smoothingLength",dimensionSet(0,1,0,0,0,0,0), readScalar(propsDict_.lookup("smoothingLength")))),
     smoothingLengthReferenceField_(dimensionedScalar("smoothingLengthReferenceField",dimensionSet(0,1,0,0,0,0,0), readScalar(propsDict_.lookup("smoothingLength")))),
     DT_("DT", dimensionSet(0,2,-1,0,0), 0.),
@@ -109,6 +110,38 @@ void Foam::constDiffSmoothing::smoothen(volScalarField& fieldSrc) const
     double deltaT = sSmoothField.mesh().time().deltaTValue();
     DT_.value() = smoothingLength_.value() * smoothingLength_.value() / deltaT;
 
+    // 获取对孔隙率场的引用
+    // 注：需要确保voidfraction场可以被访问
+    const volScalarField& voidfraction = 
+        fieldSrc.mesh().lookupObject<volScalarField>("voidfraction");
+    
+    // 创建一个变量扩散系数场
+    volScalarField diffCoeffs
+    (
+        IOobject
+        (
+            "diffCoeffs",
+            fieldSrc.mesh().time().timeName(),
+            fieldSrc.mesh(),
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+        fieldSrc.mesh(),
+        dimensionedScalar("zero", DT_.dimensions(), 0.0)
+    );
+    
+    // 只在孔隙率小于epslim的区域设置非零扩散系数
+    forAll(diffCoeffs, cellI)
+    {
+        if(voidfraction[cellI] < epslim_)
+        {
+            diffCoeffs[cellI] = DT_.value();
+        }
+        else
+        {
+            diffCoeffs[cellI] = 0.0;
+        }
+    }
     // do smoothing
     solve
     (
@@ -150,6 +183,38 @@ void Foam::constDiffSmoothing::smoothen(volVectorField& fieldSrc) const
     double deltaT = vSmoothField_.mesh().time().deltaTValue();
     DT_.value() = smoothingLength_.value() * smoothingLength_.value() / deltaT;
 
+    // 获取对孔隙率场的引用
+    // 注：需要确保voidfraction场可以被访问
+    const volScalarField& voidfraction = 
+        fieldSrc.mesh().lookupObject<volScalarField>("voidfraction");
+    
+    // 创建一个变量扩散系数场
+    volScalarField diffCoeffv
+    (
+        IOobject
+        (
+            "diffCoeffv",
+            fieldSrc.mesh().time().timeName(),
+            fieldSrc.mesh(),
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+        fieldSrc.mesh(),
+        dimensionedScalar("zero", DT_.dimensions(), 0.0)
+    );
+    
+    // 只在孔隙率小于epslim_的区域设置非零扩散系数
+    forAll(diffCoeffv, cellI)
+    {
+        if(voidfraction[cellI] < epslim_)
+        {
+            diffCoeffv[cellI] = DT_.value();
+        }
+        else
+        {
+            diffCoeffv[cellI] = 0.0;
+        }
+    }
     // do smoothing
     solve
     (

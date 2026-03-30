@@ -1,0 +1,2 @@
+SOURCE = \
+$(derivedSources)/meanSupVelocityForce/meanSupVelocityForce.C 

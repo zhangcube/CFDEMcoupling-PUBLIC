@@ -1,0 +1,2 @@
+derivedSources=sources/derived
+LIB = $(CFDEM_LIB_DIR)/libfvOptionsCFDEM

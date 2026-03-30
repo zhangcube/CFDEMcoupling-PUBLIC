@@ -149,7 +149,7 @@ public:
 
 
     // Member Functions
-        void partToArray(const label&, const vector&, const vector&, const vector& Ufluid=vector::zero, scalar Cd=scalar(0),const vector& CdExtra=vector::zero) const;
+        void partToArray(const label&, const vector&, const vector&, const vector& Ufluid=vector::zero, scalar Cd=scalar(0),const vector& CdExtra=vector::zero, scalar eps=scalar(0), scalar alphawater=scalar(0)) const;    //modify by zlf
 
         //function to set anisotropic drag components for DEM side only.
         void partToArrayAnisotropic(const label&, const vector&, const vector& dragEx=vector::zero) const;
@@ -298,7 +298,7 @@ public:
 
         inline scalar getCG(int index=0) const { return particleCloud_.cg(index); };
 
-        const scalar scaleDrag(int index=0) const;
+        scalar scaleDrag(int index=0) const;    //modify by zlf
 
         const scalar& scaleDragLocal() const {return scaleDragLocal_;};
 

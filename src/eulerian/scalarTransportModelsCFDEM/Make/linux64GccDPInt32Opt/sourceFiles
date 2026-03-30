@@ -1,0 +1,11 @@
+SOURCE = \
+scalarTransportModel/scalarTransportModel.C \
+scalarTransportModel/newScalarTransportModel.C \
+temperatureModel/temperatureModel.C \
+generalManual/generalManual.C \
+noTransport/noTransport.C \
+generalPhaseChange/generalPhaseChange.C \
+eulerianScalarField/eulerianScalarField.C \
+eulerianScalarField/newEulerianScalarField.C \
+phaseChangeModel/phaseChangeModel.C \
+phaseChangeModel/newPhaseChangeModel.C 

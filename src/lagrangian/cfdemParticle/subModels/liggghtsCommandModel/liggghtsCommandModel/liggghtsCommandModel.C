@@ -264,13 +264,13 @@ void liggghtsCommandModel::parseCommandList(wordList& commandList,labelList& lab
                                             bool& timeStamp)
 {
     bool addBlank = true;  // std no blanks after each word
-    fileName add;
+    string add;  // 改为 string 类型
     label numberCount=0;   // nr of scalars inserted to command
     label labelCount=0;   // nr of labels inserted to command
 
     forAll(commandList,i)
     {
-        add = word(commandList[i]);
+        add = string(commandList[i]);  // 直接转换为 string
 
         //- handle symbols
         if (add == "$couplingInterval")
@@ -282,6 +282,12 @@ void liggghtsCommandModel::parseCommandList(wordList& commandList,labelList& lab
         else if (add=="dot")    add = ".";
         else if (add=="dotdot") add = "..";
         else if (add=="slash")  add = "/";
+        else if (add=="squote")  add = "'";
+        else if (add=="dquote")  add = "\"";
+        else if (add=="space")   add = " ";
+        else if (add=="lt")      add = "<";
+        else if (add=="gt")      add = ">";
+        else if (add=="eq")      add = "=";
         else if (add=="noBlanks")  // no blanks after the following words
         {
             add = "";

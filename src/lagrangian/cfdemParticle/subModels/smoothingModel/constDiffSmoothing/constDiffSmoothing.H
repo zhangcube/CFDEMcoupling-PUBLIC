@@ -62,6 +62,7 @@ private:
     dictionary propsDict_;
     scalar lowerLimit_;
     scalar upperLimit_;
+    scalar epslim_;    //modify by zlf
     dimensionedScalar smoothingLength_;
     dimensionedScalar smoothingLengthReferenceField_;
     mutable dimensionedScalar DT_;

@@ -105,8 +105,8 @@ implicitCouple::implicitCouple
         Info << "implicit momentum exchange field is limited to : " << KslLimit_ << endl;
     }
 
-    if (propsDict_.found("minAlphaP"))
-        maxAlpha_ = 1-readScalar(propsDict_.lookup ("minAlphaP"));
+    if (propsDict_.found("epslim"))
+        maxAlpha_ = readScalar(propsDict_.lookup ("epslim"));    //modify by zlf
 
     Info << "implicit momentum exchange field calculate if alphaP larger than : " <<  maxAlpha_ << endl;
 }
