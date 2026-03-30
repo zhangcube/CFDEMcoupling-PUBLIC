@@ -72,6 +72,10 @@ private:
 
     const volScalarField& voidfraction_;
 
+    word VOFvoidfractionFieldName_;   //modify by zlf
+
+    const volScalarField& alpha_;    // ref to VOF voidfraction
+
     word UsFieldName_;   
 
     const volVectorField& UsField_;

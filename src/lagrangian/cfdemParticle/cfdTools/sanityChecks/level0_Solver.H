@@ -15,7 +15,7 @@ if (modelType=="Bfull"){
             found=true;
     }
     if(!found)
-        FatalError <<"gradPForce model not found! Consider selecting gradPForce model or switching to model type B.\n" << abort(FatalError);
+        //FatalError <<"gradPForce model not found! Consider selecting gradPForce model or switching to model type B.\n" << abort(FatalError);
 
     // check if viscForce is used
     found=false;
@@ -51,7 +51,7 @@ if (modelType=="Bfull"){
             found=true;
     }
     if(!found)
-        FatalError <<"gradPForce model not found! Consider selecting gradPForce model or switching to model type B.\n" << abort(FatalError);
+        //FatalError <<"gradPForce model not found! Consider selecting gradPForce model or switching to model type B.\n" << abort(FatalError);
 
     // check if viscForce is used
     found=false;

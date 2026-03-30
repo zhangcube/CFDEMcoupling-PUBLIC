@@ -133,7 +133,7 @@ void viscForce::setForce() const
     vector force;
     label cellI;
     scalar rs(0);
-    const scalar  fourPiByThree(4./3.*M_PI);
+    //const scalar  fourPiByThree(4./3.*M_PI);
 
     #include "resetDivTauInterpolator.H"
     #include "setupProbeModel.H"

@@ -147,7 +147,7 @@ void MeiLift::setForce() const
     vector omegaParticle(0,0,0);
     vector omegaCrossUr(0,0,0);
 
-    #include "resetVorticityInterpolator.H"
+    //#include "resetVorticityInterpolator.H"
     #include "resetUInterpolator.H"
     #include "setupProbeModel.H"
 

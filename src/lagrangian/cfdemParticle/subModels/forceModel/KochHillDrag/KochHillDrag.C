@@ -68,7 +68,9 @@ KochHillDrag::KochHillDrag
     voidfractionFieldName_(propsDict_.lookupOrDefault<word>("voidfractionFieldName","voidfraction")),
     voidfraction_(sm.mesh().lookupObject<volScalarField> (voidfractionFieldName_)),
     UsFieldName_(propsDict_.lookupOrDefault("granVelFieldName",word("Us"))),
-    UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_))
+    UsField_(sm.mesh().lookupObject<volVectorField> (UsFieldName_)),
+    VOFvoidfractionFieldName_(propsDict_.lookup("VOFvoidfractionFieldName")),  //modify by zlf
+    alpha_(sm.mesh().lookupObject<volScalarField> (VOFvoidfractionFieldName_))  //modify by zlf
 {
     // suppress particle probe
     if (probeIt_ && propsDict_.found("suppressProbe"))
@@ -129,6 +131,7 @@ void KochHillDrag::setForce() const
 
     vector position(0,0,0);
     scalar voidfraction(1);
+    scalar alphawater(0);    //modify by zlf
     vector Ufluid(0,0,0);
     vector drag(0,0,0);
     vector dragExplicit(0,0,0);
@@ -151,6 +154,7 @@ void KochHillDrag::setForce() const
 
     #include "resetVoidfractionInterpolator.H"
     #include "resetUInterpolator.H"
+    #include "resetAlphaInterpolator.H"  //modify by zlf
     #include "setupProbeModel.H"
 
     for(int index = 0;index <  particleCloud_.numberOfParticles(); index++)
@@ -171,6 +175,7 @@ void KochHillDrag::setForce() const
                 position = particleCloud_.cfdemCloud::position(index);
                 voidfraction = voidfractionInterpolator_().interpolate(position,cellI);
                 Ufluid = UInterpolator_().interpolate(position,cellI);
+                alphawater = alphaInterpolator_().interpolate(position,cellI);  //modify by zlf
 
                 //Ensure interpolated void fraction to be meaningful
                 // Info << " --> voidfraction: " << voidfraction << endl;
@@ -180,6 +185,7 @@ void KochHillDrag::setForce() const
             {
                 voidfraction = voidfraction_[cellI];
                 Ufluid = U_[cellI];
+                alphawater = alpha_[cellI];  //modify by zlf
             }
 
             // correct voidfraction
@@ -303,7 +309,8 @@ void KochHillDrag::setForce() const
         }
 
         // write particle based data to global array
-        forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient);
+        forceSubM(0).partToArray(index,drag,dragExplicit,Ufluid,dragCoefficient,vector::zero,voidfraction,alphawater);  //modify by zlf
+        //forceSubM(0).passDragOnlyForce(index,drag);
     }
 }
 
